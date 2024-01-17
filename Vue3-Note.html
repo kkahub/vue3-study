@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <mata charset="utf-8">
+        <title>Vue3 Note</title>
+        <style>
+            *{
+                margin:0; padding:0; font-family: '맑은고딕', 'Lato', Gothic A1, Consolas; font-size: 16px; line-height: 1.4;
+            }
+            body{background: #efefef;}
+            h2{ margin:10px; padding:7px 0; font-size:20px;}
+            details{ overflow: hidden; margin:10px; box-shadow: 0 0 8px rgba(0,0,0,.2); border-radius: 7px; background:#fff;}
+            summary {padding:12px 10px; font-size:18px; font-weight: bold; }
+            .desc_wrap{ padding:7px 10px 7px 25px; border-top:1px solid #ddd;}
+            ul{ list-style: none; }
+            ul > li{ position: relative;  padding: 2px 0; padding-left:10px;}
+            ul > li::before { content:'ㆍ'; position: absolute; top:3px; left:-4px;}
+            p{padding:2px 5px;}
+            b{font-weight: 700;}
+            pre{overflow-x: auto; margin: 8px 5px 15px; padding:10px; border-radius: 7px; background:#213547; color:#ddd;}
+            ul > li > pre {margin: 8px 0 15px;}
+            .gray{color:#888;}
+        </style>
+    </head>
+    <body>
+        <h2>반응형 기초</h2>
+        <details>
+            <summary>nextTick</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        method에서 업데이트 된 DOM에 접근 가능하게 함
+                        <pre><code>const onHandleEvent = () => {
+    count.value += 1
+    nextTick(() => {
+        console.log(document.querySelector('#countPrint').textContent)
+    })
+}</code></pre>
+                    </li>
+                    <li>
+                        async / awaite로 nextTick 적용하는 방법
+                        <pre><code>const onHandleEvent = async () => {
+    count.value += 1
+    await nextTick()
+    console.log(document.querySelector('#countPrint').textContent) <span class="gray">// 2</span>
+}</code></pre>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>계산된 속성</h2>
+        <details>
+            <summary>method와 computed 차이</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>method</b> : 어떤 값이 변하면 리렌더링하고, 리렌더링 할 때 마다 함수를 실행함
+                    </li>
+                    <li>
+                        <b>computed</b> : 관련된 값이 직접적으로 변화하기 전 까지 업뎃 안됨.
+                        의존된 반응형을 기반으로 캐시 됨
+                    </li>
+                    <li>
+                        computed는 기본이 getter 전용임. 드물게 수정 가능하게 하려면 get() / set()으로 설정해 줄 수 있음
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>클래스와 스타일 바인딩</h2>
+        <details>
+            <summary>컴포넌트에서 클래스 사용. $attrs</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        컴포넌트에서 준 클래스는 자식에게 추가로 준다.
+                    </li>
+                    <li>
+                        클래스 바인딩도 마찬가지
+                        <pre><code><MyComponent :class="{ active: isActive }" /></code></pre>
+                    </li>
+                    <li>
+                        여러 자식 엘리먼트 중에 클래스를 줄 자식에게 $attrs 속성을 사용해야함
+                        <pre><code><p :class="$attrs.class">안녕!</p></code></pre>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>조건부 렌더링</h2>
+        <details>
+            <summary>v-if와 v-show 차이</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        v-if는 lazy함. 실제 조건부 렌더링으로 false면 true일 때 까지 아무 일도 안함.<br>
+                        v-if는 전환 비용이 높음
+                    </li>
+                    <li>
+                        v-show는 CSS기반으로 초기 조건과 관계 없이 렌더링<br>
+                        v-show는 초기 렌더링 비용이 높음
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </body>
+</html>
