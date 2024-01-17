@@ -95,11 +95,24 @@
                 <ul>
                     <li>
                         v-if는 lazy함. 실제 조건부 렌더링으로 false면 true일 때 까지 아무 일도 안함.<br>
-                        v-if는 전환 비용이 높음
+                        v-if는 전환 비용이 높음 → 조건이 적게 변경되는 경우 사용
                     </li>
                     <li>
                         v-show는 CSS기반으로 초기 조건과 관계 없이 렌더링<br>
-                        v-show는 초기 렌더링 비용이 높음
+                        v-show는 초기 렌더링 비용이 높음 → 매우 자주 변환 시 사용
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>v-if와 v-for 동시 사용</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        v-if와 v-for를 같은 노드에 사용하는 것은 권장되지 않음
+                    </li>
+                    <li>
+                        v-if가 우선순위가 높고, v-for 접근을 안함
                     </li>
                 </ul>
             </div>
