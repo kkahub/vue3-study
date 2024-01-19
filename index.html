@@ -8,7 +8,7 @@
                 margin:0; padding:0; font-family: '맑은고딕', 'Lato', Gothic A1, Consolas; font-size: 16px; line-height: 1.4;
             }
             body{background: #efefef;}
-            h2{ margin:10px; padding:7px 0; font-size:20px;}
+            h2{ margin:25px 10px 7px 10px; padding:2px 0; font-size:20px;}
             details{ overflow: hidden; margin:10px; box-shadow: 0 0 8px rgba(0,0,0,.2); border-radius: 7px; background:#fff;}
             summary {padding:12px 10px; font-size:18px; font-weight: bold; }
             .desc_wrap{ padding:7px 10px 7px 25px; border-top:1px solid #ddd;}
@@ -17,9 +17,12 @@
             ul > li::before { content:'ㆍ'; position: absolute; top:3px; left:-4px;}
             p{padding:2px 5px;}
             b{font-weight: 700;}
-            pre{overflow-x: auto; margin: 8px 5px 15px; padding:10px; border-radius: 7px; background:#213547; color:#ddd;}
+            .code{overflow-x: auto; margin: 8px 0 15px; padding:10px; border-radius: 7px; background:#213547; color:#ddd;}
+            xmp{display: inline-block;}
             ul > li > pre {margin: 8px 0 15px;}
             .gray{color:#888;}
+            .org{color:#F07178;}
+            .pp{color:#C792EA;}
         </style>
     </head>
     <body>
@@ -30,20 +33,24 @@
                 <ul>
                     <li>
                         method에서 업데이트 된 DOM에 접근 가능하게 함
-                        <pre><code>const onHandleEvent = () => {
+                        <div class="code">
+                            <xmp>const onHandleEvent = () => {
     count.value += 1
     nextTick(() => {
         console.log(document.querySelector('#countPrint').textContent)
     })
-}</code></pre>
+}</xmp>
+                        </div>
                     </li>
                     <li>
                         async / awaite로 nextTick 적용하는 방법
-                        <pre><code>const onHandleEvent = async () => {
+                        <div class="code">
+                            <xmp>const onHandleEvent = async () => {
     count.value += 1
     await nextTick()
     console.log(document.querySelector('#countPrint').textContent) <span class="gray">// 2</span>
-}</code></pre>
+}</xmp>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -78,11 +85,15 @@
                     </li>
                     <li>
                         클래스 바인딩도 마찬가지
-                        <pre><code><MyComponent :class="{ active: isActive }" /></code></pre>
+                        <div class="code">
+                            <xmp><MyComponent :class="{ active: isActive }" /></xmp>
+                        </div>
                     </li>
                     <li>
                         여러 자식 엘리먼트 중에 클래스를 줄 자식에게 $attrs 속성을 사용해야함
-                        <pre><code><p :class="$attrs.class">안녕!</p></code></pre>
+                        <div class="code">
+                            <xmp><p :class="$attrs.class">안녕!</p></xmp>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -108,11 +119,103 @@
             <summary>v-if와 v-for 동시 사용</summary>
             <div class="desc_wrap">
                 <ul>
+                    <li>v-if와 v-for를 같은 노드에 사용불가</li>
+                    <li>v-if가 우선순위가 높고, v-for 접근을 안함</li>
                     <li>
-                        v-if와 v-for를 같은 노드에 사용하는 것은 권장되지 않음
+                        해결 : v-if / v-for 모두 <xmp><template></xmp>에 사용할 수 있기 때문에 템플릿에 v-for를 먼저 선언
+                        <div class="code"><xmp><template v-for="todo in todos">
+    <li v-if="!todo.isComplete">
+        {{ todo.name }}
+    </li>
+</template></xmp></div>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>목록 렌더링</h2>
+        <details>
+            <summary>v-for</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>목록이 변경 될 때 추적할 수 있게 :key로 힌트를 제공해야함</li>
+                    <li>컴포넌트에서 v-for를 사용하면 데이터를 전달하기 위해 props를 사용해야함</li>
+                    <li>
+                        computed로 편집한 객체나 배열을 v-for할 수도 있음
+                        <div class="code">
+                            <xmp>const fruitSort = computed(() => {
+    return fruits.value.filter((fruit) => fruit.title === '포도')
+})</xmp>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>v-for와 ref/reactive</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        ref 객체를 이용한 렌더링
+                        <div class="code">
+                            <xmp>const fruits = ref([{ title: '사과', color: '빨강' }, { title: '포도', color: '보라' }, { title: '오렌지', color: '주황' }])
+
+<li v-for="(fruit, index) in fruits" :key="index">{{ fruit.title }} : {{ fruit.color }}</li></xmp>
+                        </div>
                     </li>
                     <li>
-                        v-if가 우선순위가 높고, v-for 접근을 안함
+                        reactive 객체를 이용한 렌더링
+                        <div class="code">
+                            <xmp>const fruits = reactive({ title: '사과', color: '빨강' })
+
+<li v-for="(value, key, index) in fruits" :key="key">{{ index }}. {{ value }}</li></xmp>
+                        </div>
+                    </li>
+                    <li>
+                        - ref .접근자로 접근하지만 reactive는 알아서 접근<br>
+                        - 객체를 재할당하면 ref는 반응형을 유지 / reactive는 반응형을 잃음<br>
+                        - ref와 reactive를 섞어 쓰기보다는 ref로 통일하여 일관성 있게 작업
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>이벤트 처리</h2>
+        <details>
+            <summary>이벤트 수식어</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>.stop : 클릭 이벤트 전파 중지( = event.stopPropagation())</li>
+                    <li>.prevent : 기본 이벤트 중지( = event.preventDefault())</li>
+                    <li>.self : event.target이 엘리먼트 자신일 경우만 실행</li>
+                    <li>.capture : 캡처링</li>
+                    <li>.once : 이벤트 한번만</li>
+                    <li>.passive : event.preventDefault() 무효화.<br>.prevent와 동시 사용 불가</li>
+                    <li>
+                        수식어를 연결할 수도 있고, 핸들러 없이도 사용 가능
+                        <div class="code">
+                            <xmp><a @click.stop.prevent="doThat"></a>
+
+<form @submit.prevent></form>
+
+<div @scroll.passive="onScroll">...</div></xmp>
+                        </div>
+                    </li>
+                </ul>
+                <p>* @click.prevent.self :  모든 클릭 차단</p>
+                <p>* @click.self.prevent :  자신 클릭 차단</p>
+            </div>
+        </details>
+
+        <h2>Form 입력 바인딩</h2>
+        <details>
+            <summary>select</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        v-model의 초기값=옵션값이 아니면 선택되지 않은 상태로 렌더링 됨<br>
+                        iOS에서 첫 번째 항목을 선택 할 수 없게 됨<br>
+                        빈값을 주고 비활성화 해야함
                     </li>
                 </ul>
             </div>
