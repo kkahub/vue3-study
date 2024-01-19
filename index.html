@@ -220,5 +220,59 @@
                 </ul>
             </div>
         </details>
+
+        <h2>감시자</h2>
+        <details>
+            <summary>watch 특성</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>얕은 감시자 특성 → 깊은 감시자로 변경하려면 deep:true</li>
+                    <li>lazy 특성 → 즉각 감시로 변경하려면 immediate:true</li>
+                    <li>
+                        부모컴포넌트 업데이트 후 자신 컴포넌트 업데이트 전에 호출<br>
+                        → 업데이트 후 DOM 액세스하려면 flush:'post'<br>
+                        → 동일한 틱 내에 변경 때 마다 동기적으로 호출하려면 flush: 'sync'
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>watch와 computed의 역할</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        computed는<br>
+                        - 컴포넌트의 상태를 변경하고 싶을 때 사용
+                    </li>
+                    <li>
+                        watch는<br>
+                        - 비동기 처리 (ex : 데이터를 fetch할 때)<br>
+                        - 시간이 많이 소요되는 조작 (ex : lodash)<br>
+                        - DOM 조작하기<br>
+                        - 로컬 저장소, 오디오 재생과 같은 브라우저 API<br>
+                    </li>
+                    <p>* computed가 선언형 프로그래밍 방식으로 사용 할 수 있으면 우선 시 한다.</p>
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>watch와 watchEffect 차이</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        watch는<br>
+                        - 이전 값을 같이 보고 싶을 때 사용<br>
+                        - lazy해서 특정 데이터가 변경 됐을 때 실행<br>
+                        - reactive 종속성이 변경 될 때만 실행
+                    </li>
+                    <li>
+                        watchEffect는<br>
+                        - watch의 단순화 버전<br>
+                        - 의존성이 있는 데이터에 대해 즉각 실행<br>
+                        - 정의되거나 reactive 종속성이 변경될 때 즉시 실행
+                    </li>
+                </ul>
+            </div>
+        </details>
     </body>
 </html>
