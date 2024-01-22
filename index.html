@@ -7,7 +7,7 @@
             *{
                 margin:0; padding:0; font-family: '맑은고딕', 'Lato', Gothic A1, Consolas; font-size: 16px; line-height: 1.4;
             }
-            body{background: #efefef;}
+            body{background: #efefef; padding-bottom:10px;}
             h2{ margin:25px 10px 7px 10px; padding:2px 0; font-size:20px;}
             details{ overflow: hidden; margin:10px; box-shadow: 0 0 8px rgba(0,0,0,.2); border-radius: 7px; background:#fff;}
             summary {padding:12px 10px; font-size:18px; font-weight: bold; }
@@ -268,8 +268,21 @@
                     <li>
                         watchEffect는<br>
                         - watch의 단순화 버전<br>
-                        - 의존성이 있는 데이터에 대해 즉각 실행<br>
+                        - 의존성이 있는 데이터에 대해 즉각 실행(초기값 포함)<br>
                         - 정의되거나 reactive 종속성이 변경될 때 즉시 실행
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>템플릿 참조</h2>
+        <details>
+            <summary>부모 , 자식간의 ref 활용을 위한 defineExpose</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        script setup은 private하기 때문에 전체 액세스 권한을 거부할 수 있다.<br>
+                        때문에 부모, 자식간에 같은 권한을 가지려면 defineExpose에 넣어 데이터를 노출한다.
                     </li>
                 </ul>
             </div>
