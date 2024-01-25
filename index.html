@@ -14,9 +14,10 @@
             summary {padding:12px 10px; font-size:18px; font-weight: bold; }
             .desc_wrap{ padding:7px 10px 7px 25px; border-top:1px solid #ddd;}
             ul{ list-style: none; }
-            ul > li{ position: relative;  padding: 2px 0; padding-left:10px;}
+            ul > li{ position: relative;  padding: 3px 0; padding-left:10px;}
             ul > li::before { content:'ㆍ'; position: absolute; top:3px; left:-4px;}
-            p{padding:4px 5px;}
+            ol { padding:10px 0 0 15px;}
+            p{padding:2px 5px;}
             b{font-weight: 700;}
             .code{overflow-x: auto; margin: 8px 0 15px; padding:10px; border-radius: 7px; background:#213547; color:#ddd;}
             xmp{display: inline-block;}
@@ -367,6 +368,110 @@ function buttonClick() {
                 </ul>
                 <p>* $attrs로 접근 ex) $attrs.class</p>
                 <p>* 상속 비활성화 : defineOptions({ inheriteAttrs : false })</p>
+            </div>
+        </details>
+
+        <h2>슬롯</h2>
+        <details>
+            <summary>slot</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        엄격한 부모, 자식 컴포넌트 관계가 아닌 Vue 컴포넌트 메커니즘
+                    </li>
+                    <li>자식에게 있어야 할 템플릿을 부모에서 작성할 수 있고, 자식만 접근 할 수 있는 prop값을 slot의 props로 부모가 접근 할 수 있게 함</li>
+                    <li>부모에게 전달 할 데이터가 많을 경우 좋지 않은 방법</li>
+                    <li>html 태그 처럼만 사용 할 수 있어 class, style과 같은 데이터는 넘길 수 없음<li>
+                </ul>
+            </div>
+        </details>
+        
+        <h2>제공/주입</h2>
+        <details>
+            <summary>provide 잘 사용하는 법</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        반응성 값과 관련 메소드의 유지관리를 위해 묶어 객체로 전달하는 방법을 씀<br>
+                        <span class="gray">- provide component</span>
+                        <div class="code">
+                            <xmp>import { ref, provide, readonly } from 'vue'
+
+const num1 = ref(0)
+function updateCount() {
+    num1.value++
+}
+
+provide(num1, {num1, updateCount})
+</xmp>
+                        </div>
+                    </li>
+                    <li>
+                        inject로 쉽게 편집되어 오염될 수 있을 때 readonly 함수를 사용<br>
+                        <span class="gray">- inject component</span>
+                        <div class="code">
+                            <xmp>import { inject } from 'vue'
+
+const { num1, updateCount } = inject('num1')
+
+<template>
+    <button @click="updateCount">{{ num1 }}</button>
+</template>
+</xmp>
+                        </div>
+                    </li>
+                    <li>
+                        대규모 프로젝트에서는 provide 키 값을 string으로 사용하기 보다 Symbol로 관리하면 좋음<br>
+                        Symbol를 사용해 고유한 키로 만들고 실수로 값을 변경하는 일이 없도록 해서 무결성과 안정성 보장.<br>
+                        <span class="gray">- keys.js</span>
+                        <div class="code">
+                            <xmp>export const injectionKey = Symbol()</xmp>
+                        </div>
+                        <span class="gray">- provide component</span>
+                        <div class="code">
+                            <xmp>import { provide } from 'vue'
+import { injectionKey } from './keys.js'
+
+provide(injectionKey, { ... })
+</xmp>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>inject</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        inject를 했는데 provide가 없을 때 기본값 설정
+                        <div class="code">
+                            <xmp>const value = inject('key', 100) // 기본값 100으로 설정</xmp>
+                        </div>
+                    </li>
+                    <li>
+                        inject를 했는데 provide가 없을 때 동작할 함수 설정
+                        <div class="code">
+                            <xmp>const value = inject('key', () => {
+    return Math.random()
+})</xmp>
+                        </div>
+                    <li>
+                </ul>
+            </div>
+        </details>
+        
+        <h2>비동기 구성요소</h2>
+        <details>
+            <summary>defineAsyncComponent</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        현재 필요없는 컴포넌트를 나중에 로드해서 로드 속도를 올릴 수 있는 방법<br>
+                        v-if를 써서 노출/비노출을 하는 방법은 컴포넌트를 이미 불러와 놓고 수행함.
+                    </li>
+                </ul>
             </div>
         </details>
     </body>
