@@ -281,6 +281,7 @@
                         - watch의 단순화 버전<br>
                         - 의존성이 있는 데이터에 대해 즉각 실행(초기값 포함)<br>
                         - 정의되거나 reactive 종속성이 변경될 때 즉시 실행
+                        - Composition API에서만 사용 가능
                     </li>
                 </ul>
             </div>
@@ -470,6 +471,63 @@ provide(injectionKey, { ... })
                     <li>
                         현재 필요없는 컴포넌트를 나중에 로드해서 로드 속도를 올릴 수 있는 방법<br>
                         v-if를 써서 노출/비노출을 하는 방법은 컴포넌트를 이미 불러와 놓고 수행함.
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>컴포저블</h2>
+        <details>
+            <summary>컴포지션 API의 인수와 toValue</summary>
+            <div class="desc_wrap">
+                <p>
+                        컴포저블 함수의 인수 값을 정확하게 넣지 않으면 오류가 생길 수 있다.<br>
+                        이때 toValue()를 이용해 유연하게 만들 수 있다.<br><br>
+                        - 인수가 참조 → 참조값 반환<br>
+                        - 인수가 함수 → 반환값 반환<br>
+                        - 인수가 참조X / 함수X  → 인수 그대로 반환<br><br>
+                        
+                        <a href="https://vuejs.org/guide/reusability/composables.html#accepting-reactive-state" target="_blank">예제 ></a><br>
+                        위의 예제에서 toValue()를 사용해 URL 문자열, 참조 및 getter를 허용
+                </p>
+            </div>
+        </details>
+
+        <details>
+            <summary>컴포지션 API의 watchEffect와 isRef</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        컴포지션 API에서 인수값이 바뀔 때 마다 작업을 하기 위해 즉시 감시자인 watchEffect를 사용 할 때 인수가 ref가 아니면 watchEffect는 오버헤드가 발생함<br>
+                        인수를 반응형인지 체크하기 위해 isRef를 사용
+                        <div class="code">
+                            <xmp>import { watchEffect, isRef } from 'vue';
+
+export function useSomething(arg) {
+    function doSomething() {
+        // arg를 이용한 복잡한 코드
+    }
+    
+    if (isRef(arg)) {
+        watchEffect(doSomething);
+    } else {
+        doSomething();
+    }
+}</xmp>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Composition API와 React Hook의 유사성</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        React Hook과 비슷해보이지만 차이점이 있음<br>
+                        React Hook은 업데이트 될 때 마다 호출 되며 성능 최적화 문제가 있을 수 있음<br><br>
+                        <a href="https://vuejs.org/guide/extras/composition-api-faq.html#comparison-with-react-hooks" target="_blank">자세한 내용은 추후에 ></a>
                     </li>
                 </ul>
             </div>
