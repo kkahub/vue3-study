@@ -501,11 +501,13 @@ provide(injectionKey, { ... })
                         컴포지션 API에서 인수값이 바뀔 때 마다 작업을 하기 위해 즉시 감시자인 watchEffect를 사용 할 때 인수가 ref가 아니면 watchEffect는 오버헤드가 발생함<br>
                         인수를 반응형인지 체크하기 위해 isRef를 사용
                         <div class="code">
-                            <xmp>import { watchEffect, isRef } from 'vue';
+                            <xmp>import { ref, isRef, watchEffect } from 'vue';
 
 export function useSomething(arg) {
+    const data = ref(null)
+
     function doSomething() {
-        // arg를 이용한 복잡한 코드
+        // arg를 이용한 실행 함수 코드
     }
     
     if (isRef(arg)) {
@@ -513,6 +515,8 @@ export function useSomething(arg) {
     } else {
         doSomething();
     }
+    
+    return data
 }</xmp>
                         </div>
                     </li>
@@ -530,6 +534,104 @@ export function useSomething(arg) {
                         <a href="https://vuejs.org/guide/extras/composition-api-faq.html#comparison-with-react-hooks" target="_blank">자세한 내용은 추후에 ></a>
                     </li>
                 </ul>
+            </div>
+        </details>
+
+        <h2>커스텀 디렉티브</h2>
+        <details>
+            <summary>커스텀 디렉티브 훅 기능 (Directive Hook)</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li><b>created</b><br>바인딩된 엘리먼트의 속성 또는 이벤트 리스너가 적용 전에 호출</li>
+                    <li><b>beforeMount</b><br>엘리먼트가 DOM에 삽입되기 전에 호출</li>
+                    <li><b>mounted</b><br>바인딩된 엘리먼트이 부모 컴포넌트 및 모든 자식 컴포넌트의 mounted 이후 호출</li>
+                    <li><b>beforeUpdate</b><br>부모 컴포넌트의 update 전에 호출</li>
+                    <li><b>update</b><br>바인딩된 엘리먼트의 부모 컴포넌트 및 모든 자식 컴포넌트의 updated 이후 호출</li>
+                    <li><b>beforeUnmount</b><br>부모 컴포넌트의 beforeUnmount 이후에 호출</li>
+                    <li><b>unmounted</b><br>부모 컴포넌트의 unmounted 전에 호출</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>커스텀 디렉티브 훅 인자</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li><b>el</b><br> 디렉티브가 바인딩된 엘리먼트</li>
+                    <li>
+                        <b>binding</b><br>
+                        - <b>value</b><br>
+                        &nbsp;&nbsp;&nbsp;디렉티브에서 전달 된 값<br>
+                        - <b>oldValue</b><br>
+                        &nbsp;&nbsp;&nbsp;beforeUpdate / updated에서만 사용. 업데이트 이전 값<br>
+                        - <b>arg</b><br>
+                        &nbsp;&nbsp;&nbsp;디렉티브에서 전달 된 인자<br>
+                        &nbsp;&nbsp;&nbsp;v-my-directive:foo<br>
+                        - <b>modifiers</b><br>
+                        &nbsp;&nbsp;&nbsp;수식어가 있는 경우, 수식어 객체<br>
+                        &nbsp;&nbsp;&nbsp;v-my-directive.foo.bar 에서 수식어 객체는 { foo : true, bar: true }<br>
+                        - <b>instance</b><br>
+                        &nbsp;&nbsp;&nbsp;디렉티브가 사용되는 컴포넌트의 인스턴스<br>
+                        - <b>dir</b><br>
+                        &nbsp;&nbsp;&nbsp;디렉티브를 정의하는 객체<br>
+                    </li>
+                    <li><b>vnode</b><br>바인딩된 엘리먼트를 나타내는 기본 VNode</li>
+                    <li><b>prevNode</b><br>beforeUpdate / updated에서만 사용. 이전 렌더링에서 바인딩된 엘리먼트를 나타내는 VNode.</li>
+                </ul>
+                <p>* el 인자를 제외하고 수정 할 수 없는 읽기 전용으로 둬야 함</p>
+                <p>* 컴포넌트에 커스텀 디렉티브를 사용 할 경우 둘 이상의 root 노드가 있으면 에러가 나기 때문에 사용X</p>
+            </div>
+        </details>
+
+        <h2>플러그인</h2>
+
+        <details>
+            <summary>플러그인</summary>
+            <div class="desc_wrap">
+                <ol>
+                    <li>여러 곳에서 쓰일 공통 함수를 plugins 디렉토리에 만들고 export 한다.</li>
+                    <li>install에 app.config.globalProperties.$name 로 전역 속성으로 사용 할 수 있게 등록</li>
+                    <li>root인 main.js에 import하고 app.use()로 사용 전달</li>
+                </ol>
+            </div>
+            <p>* 전역으로 사용은 지양해야함. 너무 많은 전역 속성이 생기면 혼란을 줌</p>
+            <p>* install할 때 app.provide() / 사용하는 곳에서 inject('pluginName')으로 지역 제공/주입 가능</p>
+        </details>
+
+        <details>
+            <summary>대표 플러그인</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li><b>Vue-router</b><br>공식 라우터로 컴포넌트 매핑 및 경로 충첩과 같은 작업 수행</li>
+                    <li><b>Vuex</b><br>컴포넌트 중앙 저장소 역할을 하며 상태 관리를 담당</li>
+                    <li><b>Vee-validate</b><br>Form 유효성 검사 기능</li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>Transition 애니메이션</h2>
+        
+        <details>
+            <summary>Transition 클래스</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>진입 클래스 (Enter)</b><br>
+                        v-enter-from → v-enter-active  → v-enter-to
+                    </li>
+                    <li>
+                        <b>진출 클래스 (Leave)</b><br>
+                        v-leave-from → v-leave-active  → v-leave-to
+                    </li>
+                </ul>
+                <p>* from : 시작값 / active : easing 처리 / to : 결과값</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>자바스크립트 Hook</summary>
+            <div class="desc_wrap">
+                <p>자바스크립트 전용 트랜지션을 사용할 때 <b>:css="false"</b>를 추가해 CSS 트랜지션 자동 감지를 꺼두어 성능 향상하는 것이 좋음.</p>
             </div>
         </details>
     </body>
