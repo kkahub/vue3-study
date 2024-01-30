@@ -22,6 +22,7 @@
             .code{overflow-x: auto; margin: 8px 0 15px; padding:10px; border-radius: 7px; background:#213547; color:#ddd;}
             xmp{display: inline-block;}
             ul > li > pre {margin: 8px 0 15px;}
+            a{color:cornflowerblue}
             .gray{color:#888;}
             .org{color:#F07178;}
             .pp{color:#C792EA;}
@@ -686,12 +687,12 @@ export function useSomething(arg) {
                     <li>
                         dataset을 이용해 딜레이를 각각 줄 수 있음<br>
                         <div class="code">
-                            <xmp>
-                                <script setup>
+                            <xmp><script setup>
     function onEnter(el, done){
         el.style.transitionDelay = el.dataset.index;
     }
 </script>
+
 <template>
     <TransitionGroup @enter="onEnter">
         <li
@@ -749,5 +750,42 @@ export function useSomething(arg) {
                 </ul>
             </div>
         </details>
+
+        <h2>툴링</h2>
+        
+        <details>
+            <summary>레거시 버전에서 스테이블 버전으로</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <a href="https://vueschool.io/articles/vuejs-tutorials/how-to-migrate-from-vue-cli-to-vite/" target="_blank">
+                            Vue CLI -> VueSchool.io의 Vite 마이그레이션 가이드
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/vitejs/awesome-vite#vue-cli" target="_blank">
+                            자동 마이그레이션에 도움이 되는 도구/플러그인
+                        </a><br><br>
+                        - Vue CLI → Vite<br>
+                        - Webpack → Vite<br>
+                        - React.js  → Vite<br>
+                        - 그 외 플러그인, 프레임워크, 빌더 등 도움 도구
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>라우팅</h2>
+
+        <details>
+            <summary>vue-router</summary>
+            <div class="desc_wrap">
+                <p>
+                        아래 명령어로 Vue3에 라우터 설치<br>
+                        yarn add vue-router@next
+                </p>
+            </div>
+        </details>
+
     </body>
 </html>
