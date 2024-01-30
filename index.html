@@ -634,5 +634,120 @@ export function useSomething(arg) {
                 <p>자바스크립트 전용 트랜지션을 사용할 때 <b>:css="false"</b>를 추가해 CSS 트랜지션 자동 감지를 꺼두어 성능 향상하는 것이 좋음.</p>
             </div>
         </details>
+
+        <h2>TransitionGroup</h2>
+        
+        <details>
+            <summary>Transition과 TransitionGroup 차이</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>v-for등 여러 태그가 들어가야 함</li>
+                    <li>tag="ul"과 같이 TranstionGroup에서 감쌀 수 있다.</li>
+                    <li>서로 영향을 주지 않기 때문에 Transition처럼 mode가 없음</li>
+                    <li>태그들은 key값을 갖고 있어야 함</li>
+                    <li>v-xxx와 같은 디렉티브는 감싸는 컨테이너가 아닌 태그 각각에 들어감</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>v-move</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        나타나거나 사라지는 것이 아닌 움직일 뿐일 때 애니메이션이 없음<br>
+                        이때 v-move를 사용하면 애니메이션 함<br>
+                        <div class="code">
+                            <xmp><template>
+    <button @click="posts.push(posts.shift())">Shift</button>
+    <TransitionGroup name="list" tag="ul">
+        <li v-for="post in posts" :key="post.id">{{ post.title }}</li>
+    </TransitionGroup>
+</template>
+
+<style scoped>
+    .list-move,
+    .list-enter-active,
+    .list-leave-active {
+        transition: all 0.5s ease-in;
+    }
+</style></xmp>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        
+        <details>
+            <summary>Javascript Hook 딜레이 따로 주는 법</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        dataset을 이용해 딜레이를 각각 줄 수 있음<br>
+                        <div class="code">
+                            <xmp>
+                                <script setup>
+    function onEnter(el, done){
+        el.style.transitionDelay = el.dataset.index;
+    }
+</script>
+<template>
+    <TransitionGroup @enter="onEnter">
+        <li
+            v-for="(post, index) in posts"
+            :key="post.id"
+            :data-index="index"
+        >
+            {{ post.title }}
+        </li>
+    </TransitionGroup>
+</template></xmp>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>텔레포트</h2>
+                
+        <details>
+            <summary>텔레포트 사용법</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>to="body", to="#modals", to=".class"</li>
+                    <li>모달과 같은 이벤트가 일어나는 컴포넌트와 멀리서 DOM을 띄워야할 때 사용</li>
+                    <li>텔레포트 될 DOM은 마운트 되기 전에 있어야 함</li>
+                    <li>렌더링된 DOM만 이동하기 때문에 논리적 계층구조에 영향이 없고 prop 또한 동일한 방식으로 작동 함</li>
+                </ul>
+            </div>
+        </details>
+
+        <h2>서스펜스</h2>
+        
+        <details>
+            <summary>서스펜스</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>아직 실험적!</li>
+                    <li>조건이 충족될 때 까지 구성요소 대신 대체 콘텐츠를 렌더링 해줌</li>
+                    <li>비동기 작업으로 script setup에서는 await로 자동 비동기 의존성을 가짐</li>
+                    <li>
+                        Suspense 직계 노드에 #default와 #fallback으로 조건을 줄 수 있음<br>
+                        #fallback 템플릿을 노출하다 로딩이 되면 Dashboard 노출
+                        <div class="code">
+                            <xmp><Suspense>
+    <Dashboard />
+    
+    <template #fallback>
+        Loading...
+    </template>
+</Suspense></xmp>
+                        </div>
+                    </li>
+                    <li>ErrorCaptured 수명 주기 hook를 사용하면 오류로 중단됐다가 정상적으로 처리할 수 있음</li>
+                </ul>
+            </div>
+        </details>
     </body>
 </html>
