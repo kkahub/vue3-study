@@ -679,7 +679,6 @@ export function useSomething(arg) {
             </div>
         </details>
 
-        
         <details>
             <summary>Javascript Hook 딜레이 따로 주는 법</summary>
             <div class="desc_wrap">
@@ -711,7 +710,7 @@ export function useSomething(arg) {
         </details>
 
         <h2>텔레포트</h2>
-                
+
         <details>
             <summary>텔레포트 사용법</summary>
             <div class="desc_wrap">
@@ -725,7 +724,7 @@ export function useSomething(arg) {
         </details>
 
         <h2>서스펜스</h2>
-        
+
         <details>
             <summary>서스펜스</summary>
             <div class="desc_wrap">
@@ -752,7 +751,7 @@ export function useSomething(arg) {
         </details>
 
         <h2>툴링</h2>
-        
+
         <details>
             <summary>레거시 버전에서 스테이블 버전으로</summary>
             <div class="desc_wrap">
@@ -784,6 +783,159 @@ export function useSomething(arg) {
                         아래 명령어로 Vue3에 라우터 설치<br>
                         yarn add vue-router@next
                 </p>
+            </div>
+        </details>
+
+        <h2>테스트</h2>
+
+        <details>
+            <summary>테스트 종류</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>단위 테스트 (Whitebox)</b><br>
+                        함수, 클래스, 컴포저블 입출력 부작용 확인
+                    </li>
+                    <li>
+                        <b>컴포넌트 테스트 (Blackbox)</b><br>
+                        컴포넌트가 마운트, 렌더링, 상호 작용이 의도대로 작동하는지 확인<br>
+                        props, 이벤트, 슬롯, 스타일, 클래스, 생명주기 훅 등 문제 확인
+                    </li>
+                </ul>
+                <p>* 예상 중인 추천 테스트 툴 Jest</p>
+            </div>
+        </details>
+
+        <h2>서버 사이드 렌더링</h2>
+
+        <details>
+            <summary>SSR 중에 특징</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        반응형 안됨 (ref, reactive)<br>
+                        - 사용자 상호 작용 및 DOM 업데이트가 없기 때문에 서버에서 반응형이 필요하지 않기 때문에 비활성화 됨
+                    </li>
+                    <li>
+                        생명 주기 훅 안됨 (mounted, updated 등)<br>
+                        - 동적 업데이트가 없기 때문에 beforeCreate, created만 호출 가능함
+                    </li>
+                    <li>
+                        하이드레이션 불일치 주의<br>
+                        - <xmp><p><div></div></p></xmp> 와 같이 잘못된 중첩 구조
+                    </li>
+                    <li>
+                        커스텀 디렉티브 불가하나 getSSRProps로 디렉티브 훅은 사용 가능<br>
+                        getSSRProps는 디렉티브 바인딩만 받음
+                    </li>
+                    <li>
+                        텔레포트는 특별 처리가 필요<br>
+                        - SSR 컨텍스트 객체의 teleports 속성에서 노출 됨<br>
+                        - body는 서버렌더링이 포함되기 때문에 텔레포트 위치로 잡으면 안되며, id로 텔레포트 위치를 잡아야함
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Nuxt</summary>
+            <div class="desc_wrap">
+                <p>React Next.js와 비슷하게 layout / page 구조와 라우터를 가진 프레임워크로 가장 추천</p>
+            </div>
+        </details>
+        
+        <h2>성능</h2>
+
+        <details>
+            <summary>페이지 로드 최적화</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>트리 쉐이킹</b><br>
+                        사용하지 않은 라이브러리나 내장 기능을 제거할 때 es6으로 export된 라이브러리가 아니면 트리쉐이킹을 하지 못함<br>
+                        ex) lodash를 쓰기 보다는 lodash-es를 사용
+                    </li>
+                    <li>
+                        <b>코드 분할</b><br>
+                        - loadLazy 활용<br>
+                        - 비동기 컴포넌트 활용 (defineAsyncComponent)
+                    </li>
+                    <li>SSR / SSG 활용</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>업데이트 최적화</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>Props 안정성</b><br>
+                        리스트에서 하나의 아이템 값만 변경되도 모든 리스트가 업데이트 함<br>
+                        active라는 prop를 만들어 관리함
+                    </li>
+                    <li>
+                        <b>코드 분할</b><br>
+                        - loadLazy 활용<br>
+                        - 비동기 컴포넌트 활용 (defineAsyncComponent)
+                    </li>
+                    <li>
+                        <b>v-once</b><br>
+                        업데이트 필요가 없는 컨텐츠에 사용해 불필요한 렌더링 줄이기
+                    </li>
+                    <li>
+                        <b>v-memo</b><br>
+                        렌더링 될 때 valueA, valueB 중에 변경사항이 있을 때만 업데이트를 함<br>
+                        <div class="code">
+                            <xmp><div v-memo="[valueA, valueB]">
+    // 자식 엘리먼트, 컴포넌트 들
+</div></xmp>
+                        </div>
+                        <b>v-memo와 v-for 성능</b><br>
+                        - 매번 모두 업데이트 하는 v-for에 v-memo를 사용하면 성능 향상에 좋음<br>
+                        - v-memo와 v-for는 같은 곳에서만 사용해야 작동함<br>
+                        <div class="code">
+                            <xmp><div 
+    v-for="item in list" 
+    :key="item.id" 
+    v-memo="[item.id === selected]"
+>
+    <p>ID: {{ item.id }} - selected: {{ item.id === selected }}</p>
+</div></xmp>
+                        </div>
+                        <p>* item.id === selected가 true / false 로 변경될 때만 렌더링</p>
+                    </li>
+                    <li>
+                        <b>계산된 안전성</b><br>
+                        computed와 watchEffect를 이용해 계산된 값이 변경될 때만 트리거하여 업데이트 함<br>
+                        <div class="code">
+                            <xmp>const count = ref(0)
+const isEven = computed(() => count.value % 2 === 0)
+watchEffect(() => console.log(isEven.value)) // true
+
+count.value = 2</xmp></div>
+                    </li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>일반 최적화</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>대규모 목록 가상화</b><br>
+                        대규모의 목록일 때 라이브러리의 도움을 받는다<br>
+                        <a href="https://github.com/Akryum/vue-virtual-scroller" target="_blank">vue-virtual-scroller</a><br>
+                        <a href="https://github.com/rocwang/vue-virtual-scroll-grid" target="_blank">vue-virtual-scroll-grid</a>
+                    </li>
+                    <li>
+                        <b>shallowRef / shallowReactive</b><br>
+                        반응형은 기본적으로 심층적이라 데이터가 클 경우 오버헤드가 생김<br>
+                        shallowRef / shallowReactive은 루트 수준의 얕은 객체 반응성을 가짐<br>
+                        루트 외에 깊게 들어가면 반응성 없음
+                    </li>
+                </ul>
             </div>
         </details>
 
