@@ -58,6 +58,32 @@
                 </ul>
             </div>
         </details>
+        
+        <details>
+            <summary>반응형 주의점</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>반응형은 proxy</b><br>
+                        proxy는 객체를 재정의할 수 있어 원본 개체와 ===로 반환된 값을 비교하면 ID가 다름<br>
+                        쉽게 말해 복사본을 만듬<br>
+                        vue  instance가 대표적인 예
+                    </li>
+                    <li>
+                        반응형에 object를 넣으면 반응형이 끊김<br>
+                        <div class="code">
+                            <xmp>// object.foo가 바껴도 fooRef는 바뀌지 않음
+const fooRef=ref(object.foo);
+
+// toRef를 활용하면 참조하면서 서로 반응형이 됨
+const fooRef=toRef(object,"foo");</xmp>
+                        </div>
+                    </li>
+                </ul>
+                <p>* Proxy는 읽기, 쓰기 과정 중간에 가로채 get() / set()으로 새로운 로직을 추가할 수 있음</p>
+                <p>* Redux Toolkit도 state가 proxy임</p>
+            </div>
+        </details>
 
         <h2>계산된 속성</h2>
         <details>
@@ -932,8 +958,8 @@ count.value = 2</xmp></div>
                     <li>
                         <b>shallowRef / shallowReactive</b><br>
                         반응형은 기본적으로 심층적이라 데이터가 클 경우 오버헤드가 생김<br>
-                        shallowRef / shallowReactive은 루트 수준의 얕은 객체 반응성을 가짐<br>
-                        루트 외에 깊게 들어가면 반응성 없음
+                        shallowRef / shallowReactive은 루트 수준의 얕은 참조, 얕은 객체 반응성을 가짐<br>
+                        .value로 접근 했을 때만 반응형이고 루트 외에 깊게 들어가면 반응성 없음
                     </li>
                 </ul>
             </div>
