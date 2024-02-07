@@ -40,7 +40,7 @@
                             <xmp>const onHandleEvent = () => {
     count.value += 1
     nextTick(() => {
-        console.log(document.querySelector('#countPrint').textContent)
+        console.log( document.querySelector('#countPrint').textContent )
     })
 }</xmp>
                         </div>
@@ -51,7 +51,7 @@
                             <xmp>const onHandleEvent = async () => {
     count.value += 1
     await nextTick()
-    console.log(document.querySelector('#countPrint').textContent) <span class="gray">// 2</span>
+    console.log( document.querySelector('#countPrint').textContent ) <span class="gray">// 2</span>
 }</xmp>
                         </div>
                     </li>
@@ -73,10 +73,10 @@
                         반응형에 object를 넣으면 반응형이 끊김<br>
                         <div class="code">
                             <xmp>// object.foo가 바껴도 fooRef는 바뀌지 않음
-const fooRef=ref(object.foo);
+const fooRef = ref(object.foo);
 
 // toRef를 활용하면 참조하면서 서로 반응형이 됨
-const fooRef=toRef(object,"foo");</xmp>
+const fooRef = toRef(object, "foo");</xmp>
                         </div>
                     </li>
                 </ul>
@@ -809,6 +809,32 @@ export function useSomething(arg) {
                         아래 명령어로 Vue3에 라우터 설치<br>
                         yarn add vue-router@next
                 </p>
+            </div>
+        </details>
+        <details>
+            <summary>route / router / routing</summary>
+            <div class="desc_wrap">
+                <ul>
+                    <li>
+                        <b>route</b><br>
+                        - 현재 라우팅된 URL 정보를 담고 있는 객체<br>
+                        - HTTP메소드와 URL 매칭 코드를 정의<br>
+                        - path, params, query, hash, fullPath, name 제공
+                    </li>
+                    <li>
+                        <b>router</b><br>
+                        - 라우터 인스턴스로 앱에서 하나만 존재하며 등록된 모든 라우트를 설정 및 관리<br>
+                        - 각 라우트는 경로, 컴포넌트, 기타 옵션을 포함<br>
+                        - 라우트들을 그룹화 하여 궂화<br>
+                        - app, mode, options, currentRoute, push(location, onComplete?, onAbort?), replace(location, onComplete?, onAbort?), go, back, foward, addRoute(routes) 제공
+                    </li>
+                    <li>
+                        <b>routing</b><br>
+                        - 클라이언트가 요청한 URI에 따라 적절한 핸들러 함수를 찾아 처리를 수행하는 것<br>
+                        - 적절한 핸들러 함수(GET, POST, PUT, DELETE)를 등록함
+                    </li>
+                </ul>
+                <p>* 예상 중인 추천 테스트 툴 Jest</p>
             </div>
         </details>
 
